@@ -1,5 +1,5 @@
 ---
- files: 
-   - name: "_copy_samples_tsv"
-     output: "result/samples.tsv"
-     input: "samples.tsv"
+ files:
+   - name: "cnvkit_pon"
+     output: "result/cnvkit_build_normal_reference/cnvkit.PoN.cnn"
+     input: "references/cnvkit_build_normal_reference/cnvkit.PoN.cnn"
