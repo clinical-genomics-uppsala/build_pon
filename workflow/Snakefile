@@ -16,3 +16,21 @@ rule all:
 
 
 # Include modules
+module references:
+    snakefile:
+        github(
+            "hydra-genetics/references",
+            path="workflow/Snakefile",
+            branch="develop",
+        )
+    config:
+        config
+
+# targets (bed)
+use rule cnvkit_create_targets from references
+
+# anti-targets (bed)
+use rule cnvkit_create_anti_targets from references
+
+# creates PoN (cnn)
+use rule cnvkit_build_normal_reference from references
