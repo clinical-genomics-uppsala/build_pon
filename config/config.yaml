@@ -1,7 +1,24 @@
 ---
 output: "config/output_files.yaml"
 resources: "config/resources.yaml"
-samples: "samples.tsv"
-units: "units.tsv"
+samples: "config/samples.tsv"
+units: "config/units.tsv"
 
 default_container: "docker://hydragenetics/common:0.1.9"
+
+reference:
+  fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
+  design_bed: "ref_data/Myeloma_backbone_GRCh38_Chr1_17.bed"
+  mappability: "ref_data/access-5k-mappable.hg19.bed"
+
+cnvkit_create_targets:
+    container: "docker://hydragenetics/cnvkit:0.9.9"
+    extra: " --split "
+
+cnvkit_create_anti_targets:
+    container: "docker://hydragenetics/cnvkit:0.9.9"
+    extra: ""
+
+cnvkit_build_normal_reference:
+  container: "docker://hydragenetics/cnvkit:0.9.9"
+  extra: ""
