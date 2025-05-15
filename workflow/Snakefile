@@ -16,21 +16,128 @@ rule all:
 
 
 # Include modules
-module references:
+
+
+# map and index BAM files
+module alignment:
     snakefile:
         github(
-            "hydra-genetics/references",
+            "hydra-genetics/alignment",
             path="workflow/Snakefile",
             branch="develop",
         )
     config:
         config
 
+
+module annotation:
+    snakefile:
+        github(
+            "hydra-genetics/annotation",
+            path="workflow/Snakefile",
+            branch="develop",
+        )
+    config:
+        config
+
+
+module cnv_sv:
+    snakefile:
+        github(
+            "hydra-genetics/cnv_sv",
+            path="workflow/Snakefile",
+            branch="haplotag_get_input_bam",
+        )
+    config:
+        config
+
+
+# mark duplicates in CCS reads
+module prealignment:
+    snakefile:
+        github(
+            "hydra-genetics/prealignment",
+            path="workflow/Snakefile",
+            branch="develop",
+        )
+    config:
+        config
+
+
+# for CNVkit PoN
+module references:
+    snakefile:
+        github(
+            "hydra-genetics/references",
+            path="workflow/Snakefile",
+            branch="add_deepsomatic_pon",
+        )
+    config:
+        config
+
+
+# use branch with my function
+# for flexible BAM input
+module snv_indels:
+    snakefile:
+        github(
+            "hydra-genetics/snv_indels",
+            path="workflow/Snakefile",
+            branch="deepsomatic_flexible_input",
+        )
+    config:
+        config
+
+
 # targets (bed)
 use rule cnvkit_create_targets from references
+
 
 # anti-targets (bed)
 use rule cnvkit_create_anti_targets from references
 
+
 # creates PoN (cnn)
 use rule cnvkit_build_normal_reference from references
+
+
+# majority of bam files will be unmapped
+# so, map them
+use rule pbmarkdup from prealignment as prealignment_pbmarkdup
+
+
+use rule pbmm2_index from alignment as alignment_pbmm2_index
+
+
+use rule pbmm2_align from alignment as alignment_pbmm2_align with:
+    input:
+        query="prealignment/pbmarkdup/{sample}_{type}_{processing_unit}_{barcode}.bam",
+        reference=expand(
+            "alignment/pbmm2_index/{ref}.{preset}.mmi",
+            ref=os.path.basename(config.get("reference", {}).get("fasta", "")),
+            preset=config.get("pbmm2_align", {}).get("preset", ""),
+        ),
+
+
+use rule pbmm2_merge from alignment as alignment_pbmm2_merge
+
+
+use rule samtools_index from alignment as alignment_samtools_index with:
+    wildcard_constraints:
+        file="^annotation/whatshap_haplotag/.+",
+
+
+# run DeepSomatic to create PoN
+# some options are different compared to the regular deepsomatic
+use rule deepsomatic_pon from references as references_deepsomatic_pon
+
+
+use rule whatshap_phase from annotation as annotation_whatshap_phase
+
+
+use rule tabix from cnv_sv as cnv_sv_tabix with:
+    wildcard_constraints:
+        file="^annotation/whatshap_phase/.+",
+
+
+use rule whatshap_haplotag from annotation as annotation_whatshap_haplotag
