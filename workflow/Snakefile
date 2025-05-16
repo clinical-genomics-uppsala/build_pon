@@ -70,7 +70,7 @@ module references:
         github(
             "hydra-genetics/references",
             path="workflow/Snakefile",
-            branch="add_deepsomatic_pon",
+            branch="develop",
         )
     config:
         config
