@@ -8,8 +8,13 @@ default_container: "docker://hydragenetics/common:0.1.9"
 
 reference:
   fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
+  fai: ""
   design_bed: "ref_data/Myeloma_backbone_GRCh38_Chr1_17.bed"
   mappability: "ref_data/access-5k-mappable.hg19.bed"
+
+bcftools_merge:
+  container: "docker://bcftools/bcftools:1.20.0" # does not exist
+  extra: ""
 
 cnvkit_create_targets:
     container: "docker://hydragenetics/cnvkit:0.9.9"
@@ -22,3 +27,25 @@ cnvkit_create_anti_targets:
 cnvkit_build_normal_reference:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   extra: ""
+
+# required by alignment or prealignment
+trimmer_software: "None"
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.25.1"
+  reports:
+    DNA:
+      included_unit_types: ['N', 'T']
+      qc_files:
+        - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
+        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+        - "qc/picard_collect_duplication_metrics/{sample}_{type}.duplication_metrics.txt"
+        - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
+        - "qc/picard_collect_insert_size_metrics/{sample}_{type}.insert_size_metrics.txt"
+        - "qc/picard_collect_multiple_metrics/{sample}_{type}.{ext}"
+        - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth_bed/{sample}_{type}.per-base.bed.gz"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "prealignment/fastp_pe/{sample}_{type}_{flowcell}_{lane}_{barcode}_fastp.json"
