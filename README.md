@@ -1,6 +1,6 @@
 # <img src="images/hydragenetics.png" width=40 /> hydra-genetics/cnvkit_pon
 
-#### create PoN for CNVkit
+#### create PoN for CNVkit and DeepSomatic
 
 ![Lint](https://github.com/hydra-genetics/cnvkit_pon/actions/workflows/lint.yaml/badge.svg?branch=develop)
 ![Snakefmt](https://github.com/hydra-genetics/cnvkit_pon/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
@@ -14,7 +14,7 @@
 
 ## :speech_balloon: Introduction
 
-The module consists of alignment  ....
+The module consists of steps required for building "panel of normals" (PoN, pon) for CNVkit and DeepSomatic.
 
 ## :heavy_exclamation_mark: Dependencies
 
@@ -34,20 +34,18 @@ Input data should be added to [`samples.tsv`](https://github.com/hydra-genetics/
 and [`units.tsv`](https://github.com/hydra-genetics/cnvkit_pon/blob/develop/config/units.tsv).
 The following information need to be added to these files:
 
-| Column Id | Description |
-| --- | --- |
+| Column Id         | Description                                                                     |
+|-------------------|---------------------------------------------------------------------------------|
 | **`samples.tsv`** |
-| sample | unique sample/patient id, one per row |
-| **`units.tsv`** |
-| sample | same sample/patient id as in `samples.tsv` |
-| type | data type identifier (one letter), can be one of **T**umor, **N**ormal, **R**NA |
-| platform | type of sequencing platform, e.g. `NovaSeq` |
-| machine | specific machine id, e.g. NovaSeq instruments have `@Axxxxx` |
-| flowcell | identifer of flowcell used |
-| lane | flowcell lane number |
-| barcode | sequence library barcode/index, connect forward and reverse indices by `+`, e.g. `ATGC+ATGC` |
-| fastq1/2 | absolute path to forward and reverse reads |
-| adapter | adapter sequences to be trimmed, separated by comma |
+| sample            | unique sample/patient id, one per row                                           |
+| **`units.tsv`**   |
+| sample            | same sample/patient id as in `samples.tsv`                                      |
+| type              | data type identifier (one letter), can be one of **T**umor, **N**ormal, **R**NA |
+| platform          | type of sequencing platform, e.g. `PacBio`                                      |
+| machine           | specific machine id, e.g. NovaSeq instruments have `Revio`                      |
+| lane              | flowcell lane number                                                            |
+| barcode           | a character string, must not be `NA`                                            |
+| bam               | absolute path to reads in BAM format                                            |
 
 ## :white_check_mark: Testing
 
@@ -68,7 +66,7 @@ Add the module to your `Snakefile` like so:
 module prealignment:
     snakefile:
         github(
-            "cnvkit_pon",
+            "build_pon",
             path="workflow/Snakefile",
             tag="1.0.0",
         )
@@ -76,16 +74,16 @@ module prealignment:
         config
 
 
-use rule * from cnvkit_pon as cnvkit_pon_*
+use rule * from build_pon as build_pon_*
 ```
 
 ### Output files
 
 The following output files should be targeted via another rule:
 
-| File | Description |
-|---|---|
-| `cnvkit_pon/PATH/FILE` | DESCRIPTION |
+| File                  | Description |
+|-----------------------|-------------|
+| `build_pon/PATH/FILE` | DESCRIPTION |
 
 ## :judge: Rule Graph
 ![rule_graph_reference](images/rulegraph.svg)
