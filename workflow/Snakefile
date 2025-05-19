@@ -72,6 +72,8 @@ module references:
             path="workflow/Snakefile",
             branch="develop",
         )
+    # snakefile:
+    #     config["local_snakefile"]["references"]
     config:
         config
 
@@ -125,12 +127,6 @@ use rule pbmm2_merge from alignment as alignment_pbmm2_merge with:
         type="N"
 
 
-#TODO: what is this?
-use rule samtools_index from alignment as alignment_samtools_index with:
-    wildcard_constraints:
-        file="^annotation/whatshap_haplotag/.+",
-
-
 # run DeepSomatic on normal samples to create PoN
 # some options are different compared to the regular deepsomatic
 use rule deepsomatic_pon from references as references_deepsomatic_pon with:
@@ -159,17 +155,17 @@ use rule tabix from cnv_sv as cnv_sv_tabix with:
     wildcard_constraints:
         file="^annotation/whatshap_phase/.+",
 
-# import pandas as pd
-# samples = pd.read_csv(config.get("samples", []), sep="\t")["sample"].tolist()
-#
-#TODO: fix this
-# rule bcftools_merge:
-#     input:
-#         expand(
-#             "annotation/whatshap_phase/{sample}_{type}.phased.vcf.gz",
-#          sample = samples, type="N"),
-#     output: "references/pon/pon.vcf.gz"
-#     shell:
-#         """
-#         bcftools merge {input} -O z -o {output}
-#         """
+
+sample_names=get_units_column(units, "sample")
+
+
+use rule bcftools_merge from references as references_bcftools_merge with:
+    input:
+        vcfs=expand(
+            "annotation/whatshap_phase/{sample}.phased.vcf.gz",
+            sample=sample_names,
+        ),
+        vcfs_tabix=expand(
+            "annotation/whatshap_phase/{sample}.phased.vcf.gz.tbi",
+            sample=sample_names,
+        ),
