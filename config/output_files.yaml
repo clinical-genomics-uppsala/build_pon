@@ -1,5 +1,8 @@
 ---
  files:
    - name: "cnvkit_pon"
-     output: "result/cnvkit_build_normal_reference/cnvkit.PoN.cnn"
+     output: "results/cnvkit_build_normal_reference/cnvkit.PoN.cnn"
      input: "references/cnvkit_build_normal_reference/cnvkit.PoN.cnn"
+   - name: "deepsomatic_pon"
+     output: "results/bcftools_merge/normal_db.vcf.gz"
+     input: "references/bcftools_merge/normal_db.vcf.gz"
