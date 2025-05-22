@@ -1,2 +1,7 @@
 sample	type	platform	machine	processing_unit	barcode	methylation	bam
-C259	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	data/bam_files/C259_N.haplotagged.bam
+C278	N	PACBIO	REVIO	m84045_250331_223703_s4	CAAGCAGAAGACGGCATACGAGATAATCGTCGGA-AATGATACGGCGACCACCGAGATCTACACCCGGATACCA	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_198/demux/pr_198_006/i7_G11r--i5_G11/m84045_250331_223703_s4.hifi_reads.i7_G11r--i5_G11.bam
+C279	N	PACBIO	REVIO	m84045_250331_223703_s4	CAAGCAGAAGACGGCATACGAGATAACATAGCCT-AATGATACGGCGACCACCGAGATCTACACATGTCCACCG	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_198/demux/pr_198_006/i7_H11r--i5_H11/m84045_250331_223703_s4.hifi_reads.i7_H11r--i5_H11.bam
+C259	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C259.deepvariant.haplotagged.bam
+C260	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C260.deepvariant.haplotagged.bam
+C264	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C264.deepvariant.haplotagged.bam
+C269	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C269.deepvariant.haplotagged.bam
