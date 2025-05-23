@@ -8,12 +8,34 @@ default_container: "docker://hydragenetics/common:3.1.1.1"
 
 reference:
   fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
-  fai: ""
-  design_bed: "ref_data/Myeloma_backbone_GRCh38_Chr1_17.bed"
+  fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
+  design_bed: "ref_data/Myeloma_backbone_GRCh38_Chr1_17_edited.bed"
   mappability: "ref_data/access-5k-mappable.hg19.bed"
 
 bcftools_merge:
   container: "docker://hydragenetics/common:3.1.1.1"
+  extra: ""
+
+pbmarkdup:
+  container: "docker://hydragenetics/pbmarkdup:1.1.0"
+  extra: "--ignore-read-names"
+
+pbmm2_index:
+  container: "docker://hydragenetics/pbmm2:1.16"
+  preset: "HIFI"
+  extra: ""
+
+pbmm2_align:
+  container: "docker://hydragenetics/pbmm2:1.16"
+  preset: "HIFI"
+  extra: ""
+
+pbmm2_merge:
+  container: "docker://hydragenetics/pbmm2:1.16"
+
+deepsomatic_pon:
+  container: "docker://google/deepsomatic:1.8.0"
+  model: "PACBIO"
   extra: ""
 
 cnvkit_create_targets:
@@ -27,6 +49,10 @@ cnvkit_create_anti_targets:
 cnvkit_build_normal_reference:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   extra: ""
+
+whatshap_phase:
+    container: "docker://hydragenetics/whatshap:2.2"
+    extra: ""
 
 # required by alignment or prealignment
 trimmer_software: "None"
