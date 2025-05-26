@@ -144,6 +144,7 @@ use rule whatshap_phase from annotation as annotation_whatshap_phase with:
     input:
         vcf="references/deepsomatic_pon/{sample}.pon.vcf.gz",
         bam="alignment/pbmm2_align/{sample}_N.bam",
+        bai="alignment/pbmm2_align/{sample}_N.bam.bai",
         fasta=config.get("reference", {}).get("fasta", ""),
     output:
         vcf="annotation/whatshap_phase/{sample}.phased.vcf.gz",
