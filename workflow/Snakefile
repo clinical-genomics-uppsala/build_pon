@@ -92,15 +92,24 @@ module snv_indels:
 
 # CNVKit PON
 # targets (bed)
-use rule cnvkit_create_targets from references
+use rule cnvkit_create_targets from references as references_cnvkit_create_targets
 
 
 # anti-targets (bed)
-use rule cnvkit_create_anti_targets from references
+use rule cnvkit_create_anti_targets from references as references_cnvkit_create_anti_targets
 
+# collect sample names from units
+# to sue in PoN file(s) creation
+sample_names=get_units_column(units, "sample")
 
 # creates PoN (cnn)
-use rule cnvkit_build_normal_reference from references
+use rule cnvkit_build_normal_reference from references as references_cnvkit_build_normal_reference with:
+    input:
+        bams=expand("alignment/pbmm2_align/{sample}_N.bam", sample=sample_names),
+        target="references/cnvkit_create_targets/cnvkit_manifest.target.bed",
+        antitarget="references/cnvkit_create_anti_targets/cnvkit_manifest.antitarget.bed",
+        ref=config.get("reference", {}).get("fasta", ""),
+        mappability=config.get("reference", {}).get("mappability","")
 
 
 # SNV PON
@@ -159,10 +168,6 @@ use rule whatshap_phase from annotation as annotation_whatshap_phase with:
 use rule tabix from cnv_sv as cnv_sv_tabix with:
     wildcard_constraints:
         file="^annotation/whatshap_phase/.+",
-
-
-sample_names=get_units_column(units, "sample")
-
 
 use rule bcftools_merge from references as references_bcftools_merge with:
     input:
