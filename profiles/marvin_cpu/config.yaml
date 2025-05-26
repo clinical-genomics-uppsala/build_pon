@@ -1,6 +1,6 @@
 jobs: 4
-keep-going: True
-restart-times: 1
+keep-going: False
+restart-times: 0
 rerun-incomplete: True
 max-jobs-per-second: 4
 max-status-checks-per-second: 4
