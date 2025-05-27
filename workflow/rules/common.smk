@@ -49,8 +49,10 @@ except WorkflowError as we:
         schema_section = ".".join(re.findall(r"\['([^']+)'\]", schema_hiearachy)[1::2])
         sys.exit(f"{error_msg} in {schema_section}")
 
-date_string = datetime.now().strftime('%Y%m%d--%H-%M-%S')
-pipeline_version = get_pipeline_version(workflow, pipeline_name="cnvkit_pon")
+# date_string = datetime.now().strftime('%Y%m%d--%H-%M-%S')
+# pipeline name here
+date_string = "build_pon"
+pipeline_version = get_pipeline_version(workflow, pipeline_name="build_pon")
 version_files = touch_pipeline_version_file_name(pipeline_version, date_string=date_string, directory="results/versions/software")
 if use_container(workflow):
     version_files += touch_software_version_file(config, date_string=date_string, directory="results/versions/software")
