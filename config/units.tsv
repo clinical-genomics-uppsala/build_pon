@@ -1,7 +1,11 @@
 sample	type	platform	machine	processing_unit	barcode	methylation	bam
-C278	N	PACBIO	REVIO	m84045_250331_223703_s4	CAAGCAGAAGACGGCATACGAGATAATCGTCGGA-AATGATACGGCGACCACCGAGATCTACACCCGGATACCA	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_198/demux/pr_198_006/i7_G11r--i5_G11/m84045_250331_223703_s4.hifi_reads.i7_G11r--i5_G11.bam
-C279	N	PACBIO	REVIO	m84045_250331_223703_s4	CAAGCAGAAGACGGCATACGAGATAACATAGCCT-AATGATACGGCGACCACCGAGATCTACACATGTCCACCG	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_198/demux/pr_198_006/i7_H11r--i5_H11/m84045_250331_223703_s4.hifi_reads.i7_H11r--i5_H11.bam
+C278	N	PACBIO	REVIO	m84045_250331_223703_s4	ATG	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_198/demux/pr_198_006/i7_G11r--i5_G11/m84045_250331_223703_s4.hifi_reads.i7_G11r--i5_G11.bam
+C279	N	PACBIO	REVIO	m84045_250331_223703_s4	ATC	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_198/demux/pr_198_006/i7_H11r--i5_H11/m84045_250331_223703_s4.hifi_reads.i7_H11r--i5_H11.bam
 C259	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C259.deepvariant.haplotagged.bam
 C260	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C260.deepvariant.haplotagged.bam
 C264	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C264.deepvariant.haplotagged.bam
 C269	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_038/analysis/pr_038_001/C269.deepvariant.haplotagged.bam
+C268	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_113/analysis/pr_113_001/C268.deepvariant.haplotagged.bam
+C270	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_113/analysis/pr_113_001/C270.deepvariant.haplotagged.bam
+C271	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_113/analysis/pr_113_001/C271.deepvariant.haplotagged.bam
+C272	N	PACBIO	REVIO	m84045_231122_151755_s3	NAS	Yes	/projects/wp2/nobackup/Twist_Myelom/Test_Analyses/pr_113/analysis/pr_113_001/C272.deepvariant.haplotagged.bam
