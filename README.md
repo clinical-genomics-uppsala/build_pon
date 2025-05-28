@@ -43,7 +43,7 @@ The following information need to be added to these files:
 | type              | data type identifier (one letter - N)                                                      |
 | platform          | type of sequencing platform, e.g. `PacBio`                                                 |
 | machine           | specific machine id, e.g. `Revio`                                                          |
-| barcode           | a character string, must not be `NA` (will be dropped in future releases of Hydra-Genetic) |
+| barcode           | a character string, must not be `NA` (will be dropped in future releases of Hydra-Genetics)|
 | bam               | absolute path to reads in BAM format                                                       |
 
 ## :white_check_mark: Testing
