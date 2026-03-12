@@ -46,7 +46,7 @@ module cnv_sv:
         github(
             "hydra-genetics/cnv_sv",
             path="workflow/Snakefile",
-            branch="haplotag_get_input_bam",
+            branch="develop",
         )
     config:
         config
@@ -85,7 +85,7 @@ module snv_indels:
         github(
             "hydra-genetics/snv_indels",
             path="workflow/Snakefile",
-            branch="deepsomatic_flexible_input",
+            branch="develop",
         )
     config:
         config
