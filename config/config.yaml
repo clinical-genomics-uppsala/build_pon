@@ -21,9 +21,9 @@ module_versions:
 reference:
   fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
-  design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
+  design_bed: &design_bed "ref_data/Expected_capture_targets_annotated_v2.bed"
   dict: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.dict"
-  mappability: "ref_data/access-5k-mappable.hg19.bed" #TODO: wrong genome version 
+  mappability: "ref_data/access-5k-mappable.bed" #TODO: wrong genome version 
 
 aligner: "vacmap"
 haplotag_path: "snv_indels/whatshap_haplotag"
