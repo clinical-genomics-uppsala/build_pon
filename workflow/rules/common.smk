@@ -56,6 +56,7 @@ version_files = touch_pipeline_version_file_name(pipeline_version, date_string=d
 if use_container(workflow):
     version_files += touch_software_version_file(config, date_string=date_string, directory="results/versions/software")
 
+
 onstart:
     export_pipeline_version_as_file(pipeline_version, date_string=date_string, directory="results/versions/software")
     # Make sure that the user have the requested containers to be used
@@ -68,11 +69,12 @@ onstart:
         # - file_name_ending, default value: mqc_versions.yaml
         # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
         export_software_version_as_file(software_info, date_string=date_string, directory="results/versions/software")
-    # print config dict as a file. Additional parameters that can be set
-    # output_file, default config
-    # output_directory, default = None, i.e. no folder
-    # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
+        # print config dict as a file. Additional parameters that can be set
+        # output_file, default config
+        # output_directory, default = None, i.e. no folder
+        # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
     export_config_as_file(update_config, date_string=date_string, directory="results/versions")
+
 
 ### Read and validate resources file
 
@@ -126,6 +128,7 @@ def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
     if column not in units.columns:
         return []
     return list(set(units[column][units[column].notna()]))
+
 
 def compile_output_file_list(wildcards):
     outdir = pathlib.Path(output_spec.get("directory", "./"))
