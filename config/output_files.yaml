@@ -6,3 +6,6 @@
    - name: "deepsomatic_pon"
      output: "results/bcftools_merge/normal_db.vcf.gz"
      input: "references/bcftools_merge/normal_db.vcf.gz"
+   - name: "multiqc_html_report"
+     output: "results/qc/multiqc/multiqc_design2.html"
+     input: "qc/multiqc/multiqc_DNA.html"
