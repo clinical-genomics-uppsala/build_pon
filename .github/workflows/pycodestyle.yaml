@@ -26,4 +26,4 @@ jobs:
           pixi-version: v0.39.0
           cache: true
       - name: Check python syntax lib
-        run: pycodestyle --max-line-length=130 --statistics workflow/scripts
+        run: pixi run pycodestyle --max-line-length=130 --statistics workflow/scripts
