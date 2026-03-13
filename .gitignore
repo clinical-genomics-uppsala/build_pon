@@ -5,7 +5,6 @@ describe_workflow.rst
 describe_jupyter_notebook.txt
 cnvkit_pon
 /data/
-/ref_data/
 
 .keras/
 .parallel/
@@ -17,8 +16,8 @@ slurm/
 
 logs/
 results/
-ref_data/
 alignment/
 annotation/
 prealignment/
 references/
+ref_data/
