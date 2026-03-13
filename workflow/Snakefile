@@ -16,15 +16,12 @@ rule all:
 
 
 # Include modules
-
-
-# map and index BAM files
 module alignment:
     snakefile:
         github(
             "hydra-genetics/alignment",
             path="workflow/Snakefile",
-            branch="develop",
+            tag=config.get("module_versions", {}).get("alignment", "develop"),
         )
     config:
         config
@@ -35,7 +32,7 @@ module annotation:
         github(
             "hydra-genetics/annotation",
             path="workflow/Snakefile",
-            branch="develop",
+            tag=config.get("module_versions", {}).get("annotation", "develop"),
         )
     config:
         config
@@ -46,19 +43,18 @@ module cnv_sv:
         github(
             "hydra-genetics/cnv_sv",
             path="workflow/Snakefile",
-            branch="develop",
+            tag=config.get("module_versions", {}).get("cnv_sv", "develop"),
         )
     config:
         config
 
 
-# mark duplicates in CCS reads
 module prealignment:
     snakefile:
         github(
             "hydra-genetics/prealignment",
             path="workflow/Snakefile",
-            branch="develop",
+            tag=config.get("module_versions", {}).get("prealignment", "develop"),
         )
     config:
         config
@@ -70,25 +66,81 @@ module references:
         github(
             "hydra-genetics/references",
             path="workflow/Snakefile",
-            branch="develop",
+            tag=config.get("module_versions", {}).get("references", "develop"),
         )
-    # snakefile:
-    #     config["local_snakefile"]["references"]
     config:
         config
 
 
-# use branch with my function
-# for flexible BAM input
 module snv_indels:
     snakefile:
         github(
             "hydra-genetics/snv_indels",
             path="workflow/Snakefile",
-            branch="develop",
+            tag=config.get("module_versions", {}).get("snv_indels", "develop"),
         )
     config:
         config
+
+
+module qc:
+    snakefile:
+        github(
+            "hydra-genetics/qc",
+            path="workflow/Snakefile",
+            tag=config.get("module_versions", {}).get("qc", "develop"),
+        )
+    config:
+        config
+
+# QC tools and reports
+use rule mosdepth from qc as qc_mosdepth with:
+    input:
+        bam="alignment/pbmm2_align/{sample}_N.bam",
+        bai="alignment/pbmm2_align/{sample}_N.bam.bai",
+
+
+use rule multiqc_longread from qc as qc_multiqc_longread
+
+
+use rule sequali from qc as qc_sequali with:
+    input:
+        infile="alignment/pbmm2_align/{sample}_{type}_{processing_unit}_{barcode}.bam",
+
+
+use rule picard_collect_alignment_summary_metrics from qc as qc_picard_collect_alignment_summary_metrics with:
+    input:
+        bam="alignment/pbmm2_align/{sample}_N.bam",
+        bai="alignment/pbmm2_align/{sample}_N.bam.bai",
+        ref=config.get("reference", {}).get("fasta", ""),
+
+
+rule samtools_dict:
+    input:
+        fasta=config.get("reference", {}).get("fasta", ""),
+    output:
+        config.get("reference", {}).get("dict", ""),
+    log:
+        "references/samtools_dict/%s.log" % config.get("reference", {}).get("fasta", "").split("/")[-1],
+    container:
+        config.get("default_container", ""),
+    shell:
+        "samtools dict {input.fasta} > {output} 2> {log}"
+
+
+use rule bed_to_interval_list from references as references_bed_to_interval_list
+
+
+use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
+    input:
+        bam="alignment/pbmm2_align/{sample}_N.bam",
+        bai="alignment/pbmm2_align/{sample}_N.bam.bai",
+        bait_intervals="references/bed_to_interval_list/%s.interval_list"
+        % config.get("reference", {}).get("design_bed", "").split("/")[-1],
+        reference=config.get("reference", {}).get("fasta", ""),
+        target_intervals="references/bed_to_interval_list/%s.interval_list"
+        % config.get("reference", {}).get("design_bed", "").split("/")[-1],
+
 
 # CNVKit PON
 # targets (bed)
@@ -99,10 +151,13 @@ use rule cnvkit_create_targets from references as references_cnvkit_create_targe
 use rule cnvkit_create_anti_targets from references as references_cnvkit_create_anti_targets
 
 # collect sample names from units
-# to sue in PoN file(s) creation
+# to use in PoN files creation
 sample_names=get_units_column(units, "sample")
 
-# creates PoN (cnn)
+# make PoN (.cnn)
+# input is overriden because natively this rule uses get_bam()
+# to extract BAM paths from units.tsv (unmapped)
+# but we need mapped BAM files
 use rule cnvkit_build_normal_reference from references as references_cnvkit_build_normal_reference with:
     input:
         bams=expand("alignment/pbmm2_align/{sample}_N.bam", sample=sample_names),
@@ -149,33 +204,33 @@ use rule deepsomatic_pon from references as references_deepsomatic_pon with:
         bed=config.get("reference",{}).get("design_bed",""),
 
 
-use rule whatshap_phase from annotation as annotation_whatshap_phase with:
+use rule whatshap_phase from snv_indels as snv_indels_whatshap_phase with:
     input:
         vcf="references/deepsomatic_pon/{sample}.pon.vcf.gz",
         bam="alignment/pbmm2_align/{sample}_N.bam",
         bai="alignment/pbmm2_align/{sample}_N.bam.bai",
         fasta=config.get("reference", {}).get("fasta", ""),
     output:
-        vcf="annotation/whatshap_phase/{sample}.phased.vcf.gz",
+        vcf="snv_indels/whatshap_phase/{sample}.phased.vcf.gz",
     log:
-        "annotation/whatshap_phase/{sample}.phased.vcf.gz.log",
+        "snv_indels/whatshap_phase/{sample}.phased.vcf.gz.log",
     benchmark:
         repeat(
-            "annotation/whatshap_phase/{sample}.phased.vcf.gz.benchmark.tsv",
+            "snv_indels/whatshap_phase/{sample}.phased.vcf.gz.benchmark.tsv",
             config.get("whatshap_phase", {}).get("benchmark_repeats", 1),
         )
 
 use rule tabix from cnv_sv as cnv_sv_tabix with:
     wildcard_constraints:
-        file="^annotation/whatshap_phase/.+",
+        file="^snv_indels/whatshap_phase/.+",
 
 use rule bcftools_merge from references as references_bcftools_merge with:
     input:
         vcfs=expand(
-            "annotation/whatshap_phase/{sample}.phased.vcf.gz",
+            "snv_indels/whatshap_phase/{sample}.phased.vcf.gz",
             sample=sample_names,
         ),
         vcfs_tabix=expand(
-            "annotation/whatshap_phase/{sample}.phased.vcf.gz.tbi",
+            "snv_indels/whatshap_phase/{sample}.phased.vcf.gz.tbi",
             sample=sample_names,
         ),

@@ -16,7 +16,8 @@ from hydra_genetics.utils.resources import load_resources
 from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 
-from hydra_genetics.utils.misc import export_config_as_file
+from hydra_genetics.utils.misc import export_config_as_file, get_input_haplotagged_bam, get_input_aligned_bam
+from hydra_genetics.utils.software_versions import add_version_files_to_multiqc
 from hydra_genetics.utils.software_versions import add_software_version_to_config
 from hydra_genetics.utils.software_versions import export_pipeline_version_as_file
 from hydra_genetics.utils.software_versions import export_software_version_as_file
@@ -49,10 +50,8 @@ except WorkflowError as we:
         schema_section = ".".join(re.findall(r"\['([^']+)'\]", schema_hiearachy)[1::2])
         sys.exit(f"{error_msg} in {schema_section}")
 
-# date_string = datetime.now().strftime('%Y%m%d--%H-%M-%S')
-# pipeline name here
-date_string = "build_pon"
-pipeline_version = get_pipeline_version(workflow, pipeline_name="build_pon")
+date_string = "pon-builder"
+pipeline_version = get_pipeline_version(workflow, pipeline_name="pon-builder")
 version_files = touch_pipeline_version_file_name(pipeline_version, date_string=date_string, directory="results/versions/software")
 if use_container(workflow):
     version_files += touch_software_version_file(config, date_string=date_string, directory="results/versions/software")
@@ -110,7 +109,7 @@ validate(output_spec, schema="../schemas/output_files.schema.yaml")
 ### Set wildcard constraints
 wildcard_constraints:
     sample="|".join(samples.index),
-    type="N|T|R",
+    type="N",
 
 
 def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
