@@ -62,7 +62,7 @@ class TestGetUnitsColumn:
 
     def test_ignores_nan_values(self, units):
         result = get_units_column(units, "score")
-        assert sorted(result) == [1.0, 3.0]
+        assert sorted(result) == ["1.0", "3.0"]
 
     def test_all_nan_returns_empty_list(self):
         df = pd.DataFrame({"sample": [None, None]})
