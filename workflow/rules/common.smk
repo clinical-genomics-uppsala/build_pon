@@ -114,6 +114,18 @@ wildcard_constraints:
     type="N",
 
 
+def get_aligner_bam(wildcards, type_override=None):
+    aligner = config.get("aligner", "pbmm2_align")
+    t = type_override if type_override is not None else wildcards.type
+    return f"alignment/{aligner}_align/{wildcards.sample}_{t}.bam"
+
+
+def get_aligner_bai(wildcards, type_override=None):
+    aligner = config.get("aligner", "pbmm2_align")
+    t = type_override if type_override is not None else wildcards.type
+    return f"alignment/{aligner}_align/{wildcards.sample}_{t}.bam.bai"
+
+
 def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
     """
     extract a column from units.tsv
