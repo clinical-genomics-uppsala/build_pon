@@ -114,16 +114,18 @@ wildcard_constraints:
     type="N",
 
 
-def get_aligner_bam(wildcards, type_override=None):
-    aligner = config.get("aligner", "pbmm2_align")
+def _get_aligner_path(wildcards, type_override, extension):
+    aligner = config.get("aligner", "pbmm2")
     t = type_override if type_override is not None else wildcards.type
-    return f"alignment/{aligner}_align/{wildcards.sample}_{t}.bam"
+    return f"alignment/{aligner}_align/{wildcards.sample}_{t}{extension}"
+
+
+def get_aligner_bam(wildcards, type_override=None):
+    return _get_aligner_path(wildcards, type_override, ".bam")
 
 
 def get_aligner_bai(wildcards, type_override=None):
-    aligner = config.get("aligner", "pbmm2_align")
-    t = type_override if type_override is not None else wildcards.type
-    return f"alignment/{aligner}_align/{wildcards.sample}_{t}.bam.bai"
+    return _get_aligner_path(wildcards, type_override, ".bam.bai")
 
 
 def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
