@@ -249,7 +249,7 @@ use rule tabix from cnv_sv as cnv_sv_tabix_sv with:
     wildcard_constraints:
         file="^cnv_sv/(pbsv_call|sniffles2_call)/.+",
 
-
+# pbsv requires pbmm2 aligner
 use rule pbsv_discover from cnv_sv as cnv_sv_pbsv_discover with:
     input:
         bam="alignment/pbmm2_align/{sample}_{type}.bam",
