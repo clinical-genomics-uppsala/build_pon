@@ -117,8 +117,6 @@ wildcard_constraints:
     type="N",
 
 
-
-
 def compile_output_file_list(wildcards):
     outdir = pathlib.Path(output_spec.get("directory", "./"))
     output_files = []
