@@ -21,9 +21,10 @@ module_versions:
 reference:
   fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
-  design_bed: &design_bed "ref_data/Expected_capture_targets_annotated_v2.bed"
+  trf: &trf "ref_data/human_GRCh38_no_alt_analysis_set.trf.bed"
+  design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
   dict: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.dict"
-  mappability: "ref_data/access-5k-mappable.bed" #TODO: wrong genome version 
+  mappability: "ref_data/access-5k-mappable.hg38.bed"
 
 aligner: "vacmap"
 haplotag_path: "snv_indels/whatshap_haplotag"
@@ -44,6 +45,19 @@ cnvkit_create_anti_targets:
 cnvkit_build_normal_reference:
   container: "docker://hydragenetics/cnvkit:0.9.11"
   extra: ""
+
+pbsv_discover:
+  container: "docker://hydragenetics/pbsv:2.9.0"
+  trf: *trf
+  extra: ""
+
+pbsv_call:
+  container: "docker://hydragenetics/pbsv:2.9.0"
+  extra: ""
+
+sniffles2_call:
+  container: "docker://hydragenetics/sniffles2:2.6.1"
+  extra: "--phase"
 
 deepsomatic_pon:
   container: "docker://google/deepsomatic:1.9.0"
@@ -101,6 +115,10 @@ sequali:
 # required by alignment or prealignment
 trimmer_software: "None"
 
+vacmap_align:
+  mode: "L"
+  container: "docker://hydragenetics/vacmap:1.0.0"
+
 whatshap_phase:
     container: "docker://hydragenetics/whatshap:2.2"
-    extra: ""
+    extra: " --ignore-read-groups"
