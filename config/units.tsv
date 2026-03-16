@@ -1,2 +1,2 @@
 sample	type	platform	machine	processing_unit	barcode	methylation	bam
-control	N	PACBIO	REVIO	m00000_s0	ATG	Yes	data/control_N.bam
+COLO829	N	PACBIO	REVIO	m00000_s0	ATG	Yes	.tests/integration/reads/test_reads.bam
