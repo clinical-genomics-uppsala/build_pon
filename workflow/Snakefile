@@ -240,7 +240,7 @@ rule bgzip_sv_vcf:
     log:
         "cnv_sv/{caller}/{sample}_{type}.vcf.gz.log",
     container:
-        config.get("default_container", ""),
+        config.get("default_container", "")
     shell:
         "bgzip -c {input} > {output} 2> {log}"
 
