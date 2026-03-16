@@ -15,6 +15,196 @@ properties:
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+  pipeline_version:
+    type: string
+  module_versions:
+    type: object
+    properties:
+      alignment:
+        type: string
+      annotation:
+        type: string
+      cnv_sv:
+        type: string
+      filtering:
+        type: string
+      prealignment:
+        type: string
+      references:
+        type: string
+      reports:
+        type: string
+      snv_indels:
+        type: string
+      qc:
+        type: string
+  reference:
+    type: object
+    properties:
+      fasta:
+        type: string
+      fai:
+        type: string
+      trf:
+        type: string
+      design_bed:
+        type: string
+      dict:
+        type: string
+      mappability:
+        type: string
+    required:
+      - fasta
+      - design_bed
+  aligner:
+    type: string
+  haplotag_path:
+    type: string
+  haplotag_suffix:
+    type: string
+  trimmer_software:
+    type: string
+  bcftools_merge:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  cnvkit_create_targets:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  cnvkit_create_anti_targets:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  cnvkit_build_normal_reference:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  deepsomatic_pon:
+    type: object
+    properties:
+      container:
+        type: string
+      model:
+        type: string
+      extra:
+        type: string
+  mosdepth:
+    type: object
+    properties:
+      container:
+        type: string
+      by:
+        type: string
+      extra:
+        type: string
+  multiqc:
+    type: object
+    properties:
+      container:
+        type: string
+      reports:
+        type: object
+  pbmarkdup:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  pbmm2_index:
+    type: object
+    properties:
+      container:
+        type: string
+      preset:
+        type: string
+      extra:
+        type: string
+  pbmm2_align:
+    type: object
+    properties:
+      container:
+        type: string
+      preset:
+        type: string
+      extra:
+        type: string
+  pbmm2_merge:
+    type: object
+    properties:
+      container:
+        type: string
+  pbsv_discover:
+    type: object
+    properties:
+      container:
+        type: string
+      trf:
+        type: string
+      extra:
+        type: string
+  pbsv_call:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  picard_collect_alignment_summary_metrics:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  picard_collect_hs_metrics:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  sequali:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  sniffles2_call:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
+  vacmap_align:
+    type: object
+    properties:
+      container:
+        type: string
+      mode:
+        type: string
+  whatshap_phase:
+    type: object
+    properties:
+      container:
+        type: string
+      extra:
+        type: string
 
 required:
   - samples
@@ -22,4 +212,3 @@ required:
   - output
   - resources
   - default_container
-
