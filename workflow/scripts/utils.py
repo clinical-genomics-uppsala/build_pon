@@ -20,7 +20,7 @@ def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
     """
     if column not in units.columns:
         return []
-    return list(set(units[column][units[column].notna()]))
+    return [str(v) for v in set(units[column][units[column].notna()])]
 
 
 def get_aligner_bam(wildcards, config: dict, type_override: typing.Optional[str] = None) -> str:
