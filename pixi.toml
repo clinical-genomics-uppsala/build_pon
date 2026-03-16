@@ -1,0 +1,40 @@
+[workspace]
+authors = ["Andrei Guliaev <andrei.guliaev@scilifelab.uu.se>"]
+channels = ["bioconda", "conda-forge"]
+name = "PoN Builder"
+platforms = ["linux-64", "osx-arm64"]
+version = "1.0"
+
+[tasks]
+precom = "PYTHONPATH=. pre-commit run pytest-check --all-files"
+tests = "PYTHONPATH=. pytest .tests/unit/"
+precom-fmt = "pre-commit run snakefmt"
+fmt-wf = "snakefmt -l 130 workflow/"
+fmt-py="snakefmt -l 130 workflow/scripts/"
+fmt-tests="snakefmt -l 130 .tests/unit/"
+dry = "snakemake --configfile config/config.yaml -n --cores 1"
+full = "snakemake --configfile config/config.yaml --profile profiles/marvin_cpu"
+rulegraph = "snakemake --configfile config/config.yaml --rulegraph | dot -Tsvg > images/rulegraph.svg"
+dotfile = "snakemake --configfile config/config.yaml --rulegraph > images/rulegraph.dot"
+
+
+[dependencies]
+python = "3.9.*"
+pulp = "<2.8"
+snakefmt = ">=0.11.0,<0.12"
+pycodestyle = ">=2.14.0,<3"
+pytest = ">=8.4.1,<9"
+
+[pypi-dependencies]
+hydra-genetics = "==3.3.2"
+setuptools = "<70"
+snakemake= ">=7.32.4, <8"
+jinja2 = "<3.1.0"
+mkdocs = "==1.4.2"
+pymdown-extensions = "==9.10"
+mkdocs-schema-reader = "==0.11.1"
+mkdocs-simple-hooks = "==0.1.5"
+mdx-spanner = "==0.0.5"
+mkdocs-yaml-schema-plugin = "==0.2.3"
+mkdocs-snakemake-rule-plugin = "==0.3.3"
+mkdocs-material = "==9.1.7"

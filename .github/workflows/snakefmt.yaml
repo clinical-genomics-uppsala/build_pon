@@ -21,14 +21,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.9.3
         with:
-          fetch-depth: 0
-      - name: Lint Code Base
-        uses: super-linter/super-linter@v5.3.1
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_SNAKEMAKE_SNAKEFMT: true
-          DEFAULT_BRANCH: main
-          OUTPUT_FOLDER: .github/linters/report
+          pixi-version: v0.63.2
+          cache: true
+          environments: default
+
+      - name: Run snakefmt check on Snakefile
+        run: |
+          pixi run snakefmt --check --verbose -l 130 workflow
+

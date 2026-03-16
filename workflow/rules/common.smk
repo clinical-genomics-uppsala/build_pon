@@ -16,7 +16,8 @@ from hydra_genetics.utils.resources import load_resources
 from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 
-from hydra_genetics.utils.misc import export_config_as_file
+from hydra_genetics.utils.misc import export_config_as_file, get_input_haplotagged_bam, get_input_aligned_bam
+from hydra_genetics.utils.software_versions import add_version_files_to_multiqc
 from hydra_genetics.utils.software_versions import add_software_version_to_config
 from hydra_genetics.utils.software_versions import export_pipeline_version_as_file
 from hydra_genetics.utils.software_versions import export_software_version_as_file
@@ -49,13 +50,12 @@ except WorkflowError as we:
         schema_section = ".".join(re.findall(r"\['([^']+)'\]", schema_hiearachy)[1::2])
         sys.exit(f"{error_msg} in {schema_section}")
 
-# date_string = datetime.now().strftime('%Y%m%d--%H-%M-%S')
-# pipeline name here
-date_string = "build_pon"
-pipeline_version = get_pipeline_version(workflow, pipeline_name="build_pon")
+date_string = "pon-builder"
+pipeline_version = get_pipeline_version(workflow, pipeline_name="pon-builder")
 version_files = touch_pipeline_version_file_name(pipeline_version, date_string=date_string, directory="results/versions/software")
 if use_container(workflow):
     version_files += touch_software_version_file(config, date_string=date_string, directory="results/versions/software")
+
 
 onstart:
     export_pipeline_version_as_file(pipeline_version, date_string=date_string, directory="results/versions/software")
@@ -69,11 +69,12 @@ onstart:
         # - file_name_ending, default value: mqc_versions.yaml
         # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
         export_software_version_as_file(software_info, date_string=date_string, directory="results/versions/software")
-    # print config dict as a file. Additional parameters that can be set
-    # output_file, default config
-    # output_directory, default = None, i.e. no folder
-    # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
+        # print config dict as a file. Additional parameters that can be set
+        # output_file, default config
+        # output_directory, default = None, i.e. no folder
+        # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
     export_config_as_file(update_config, date_string=date_string, directory="results/versions")
+
 
 ### Read and validate resources file
 
@@ -110,7 +111,21 @@ validate(output_spec, schema="../schemas/output_files.schema.yaml")
 ### Set wildcard constraints
 wildcard_constraints:
     sample="|".join(samples.index),
-    type="N|T|R",
+    type="N",
+
+
+def _get_aligner_path(wildcards, type_override, extension):
+    aligner = config.get("aligner", "pbmm2")
+    t = type_override if type_override is not None else wildcards.type
+    return f"alignment/{aligner}_align/{wildcards.sample}_{t}{extension}"
+
+
+def get_aligner_bam(wildcards, type_override=None):
+    return _get_aligner_path(wildcards, type_override, ".bam")
+
+
+def get_aligner_bai(wildcards, type_override=None):
+    return _get_aligner_path(wildcards, type_override, ".bam.bai")
 
 
 def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
@@ -127,6 +142,7 @@ def get_units_column(units: pd.DataFrame, column: str) -> typing.List[str]:
     if column not in units.columns:
         return []
     return list(set(units[column][units[column].notna()]))
+
 
 def compile_output_file_list(wildcards):
     outdir = pathlib.Path(output_spec.get("directory", "./"))

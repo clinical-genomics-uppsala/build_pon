@@ -1,2 +1,2 @@
-sample	type	platform	machine	flowcell	lane	barcode	fastq1	fastq2	adapter
-NA12878	N	NextSeq	NDX555	HFXAT1	L001	ACGT-CGTA	input/R1.fq.gz	input/R2.fq.gz	ACGT
+sample	type	platform	machine	processing_unit	barcode	methylation	bam
+COLO829	N	PACBIO	REVIO	m84039_230312_025934_s1	NAS	Yes	../../.tests/integration/reads/test_reads.bam
