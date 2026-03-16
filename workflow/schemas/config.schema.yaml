@@ -117,6 +117,20 @@ properties:
         type: string
       reports:
         type: object
+        additionalProperties:
+          type: object
+          properties:
+            included_unit_types:
+              type: array
+              items:
+                type: string
+            qc_files:
+              type: array
+              items:
+                type: string
+          required:
+            - included_unit_types
+            - qc_files
   pbmarkdup:
     type: object
     properties:
