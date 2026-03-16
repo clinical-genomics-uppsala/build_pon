@@ -118,6 +118,7 @@ trimmer_software: "None"
 vacmap_align:
   mode: "L"
   container: "docker://hydragenetics/vacmap:1.0.0"
+  extra: ""
 
 whatshap_phase:
     container: "docker://hydragenetics/whatshap:2.2"
