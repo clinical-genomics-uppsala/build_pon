@@ -1,6 +1,6 @@
-# <img src="images/hydragenetics.png" width=40 /> hydra-genetics/build_pon
+# <img src="images/hydragenetics.png" width=40 /> PoN Builder
 
-#### Create Panel of Normals for CNVkit, DeepSomatic, PBSV and Sniffles2
+#### Create Panel of Normals for CNVkit, DeepSomatic, and SVDB (using Sniffles2 and PBSV)
 
 ![Lint](https://github.com/clinical-genomics-uppsala/build_pon/actions/workflows/lint.yaml/badge.svg?branch=develop)
 ![Snakefmt](https://github.com/clinical-genomics-uppsala/build_pon/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
