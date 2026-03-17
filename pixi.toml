@@ -24,6 +24,7 @@ pulp = "<2.8"
 snakefmt = ">=0.11.0,<0.12"
 pycodestyle = ">=2.14.0,<3"
 pytest = ">=8.4.1,<9"
+drmaa = ">=0.7.9,<0.8"
 
 [pypi-dependencies]
 hydra-genetics = "==3.3.2"
