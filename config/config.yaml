@@ -23,7 +23,6 @@ reference:
   fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
   trf: &trf "ref_data/human_GRCh38_no_alt_analysis_set.trf.bed"
   design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
-  dict: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.dict"
   mappability: "ref_data/access-5k-mappable.hg38.bed"
 
 aligner: "vacmap"
@@ -32,7 +31,10 @@ haplotag_suffix: "haplotagged"
 
 bcftools_merge:
   container: "docker://hydragenetics/common:3.3.0"
-  extra: ""
+  extra: " --force-single --force-samples"
+
+bed_to_interval_list:
+  container: "docker://hydragenetics/gatk4:4.6.2.0"
 
 cnvkit_create_targets:
     container: "docker://hydragenetics/cnvkit:0.9.11"
