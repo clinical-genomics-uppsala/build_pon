@@ -49,8 +49,6 @@ properties:
         type: string
       design_bed:
         type: string
-      dict:
-        type: string
       mappability:
         type: string
     required:
