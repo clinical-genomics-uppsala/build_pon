@@ -127,10 +127,10 @@ rule samtools_dict:
     output:
         _dict_path,
     log:
-        _dict_path + ".log",
+        f"{_dict_path}.log",
     benchmark:
         repeat(
-            _dict_path + ".benchmark.tsv",
+            f"{_dict_path}.benchmark.tsv",
             config.get("samtools_dict", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("samtools_dict", {}).get("threads", config["default_resources"]["threads"])
