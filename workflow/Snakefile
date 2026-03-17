@@ -116,9 +116,9 @@ use rule picard_collect_alignment_summary_metrics from qc as qc_picard_collect_a
         ref=config.get("reference", {}).get("fasta", ""),
 
 
-_dict_path = "references/samtools_dict/%s.dict" % os.path.splitext(
-    os.path.basename(config.get("reference", {}).get("fasta", ""))
-)[0]
+_dict_path = (
+    "references/samtools_dict/%s.dict" % os.path.splitext(os.path.basename(config.get("reference", {}).get("fasta", "")))[0]
+)
 
 
 rule samtools_dict:
