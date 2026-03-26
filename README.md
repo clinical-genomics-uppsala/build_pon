@@ -56,7 +56,6 @@ The following reference files must be configured in `config/config.yaml` under t
 |-----|-------------|
 | `fasta` | Reference genome FASTA |
 | `fai` | FASTA index (`.fai`) |
-| `dict` | Picard sequence dictionary (`.dict`). If absent, generated automatically by the pipeline. |
 | `design_bed` | Capture design BED file |
 | `trf` | Tandem repeat file for PBSV (`.bed`) |
 | `mappability` | Mappability file for CNVkit |
@@ -83,13 +82,15 @@ snakemake -s ../../Snakefile --configfiles ../../config/config.yaml config/confi
 Dry-run to validate the DAG:
 
 ```bash
-pixi run dry
+# using hydra-genetics v4.0.0
+pixi run -e hg4 dry
 ```
 
 Full run on a SLURM cluster:
 
 ```bash
-pixi run full
+# using hydra-genetics v4.0.0
+pixi run -e hg4 full
 ```
 
 ### Output files
