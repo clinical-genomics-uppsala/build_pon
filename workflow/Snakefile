@@ -311,7 +311,7 @@ use rule pbsv_call from cnv_sv as cnv_sv_pbsv_call
 
 use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call with:
     input:
-        bam="alignment/vacmap_align/{sample}_N.bam", 
+        bam="alignment/vacmap_align/{sample}_N.bam",
         bai="alignment/vacmap_align/{sample}_N.bam.bai",
         ref=config.get("reference", {}).get("fasta", ""),
 
