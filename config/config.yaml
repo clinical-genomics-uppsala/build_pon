@@ -4,7 +4,7 @@ resources: "config/resources.yaml"
 samples: "config/samples_N.tsv"
 units: "config/units_N.tsv"
 
-default_container: "docker://hydragenetics/common:3.3.0"
+default_container: "docker://hydragenetics/common:4.0.0"
 pipeline_version: "1.0"
 
 module_versions:
