@@ -18,18 +18,16 @@ rulegraph = "snakemake --configfile config/config.yaml --rulegraph | dot -Tsvg >
 dotfile = "snakemake --configfile config/config.yaml --rulegraph > images/rulegraph.dot"
 
 
+# Shared conda dependencies (available in all environments)
 [dependencies]
-python = "3.9.*"
-pulp = "<2.8"
 snakefmt = ">=0.11.0,<0.12"
 pycodestyle = ">=2.14.0,<3"
 pytest = ">=8.4.1,<9"
 drmaa = ">=0.7.9,<0.8"
 
+# Shared PyPI dependencies (docs tools, available in all environments)
 [pypi-dependencies]
-hydra-genetics = "==3.3.2"
 setuptools = "<70"
-snakemake= ">=7.32.4, <8"
 jinja2 = "<3.1.0"
 mkdocs = "==1.4.2"
 pymdown-extensions = "==9.10"
@@ -39,3 +37,25 @@ mdx-spanner = "==0.0.5"
 mkdocs-yaml-schema-plugin = "==0.2.3"
 mkdocs-snakemake-rule-plugin = "==0.3.3"
 mkdocs-material = "==9.1.7"
+
+# hydra-genetics 3.x / Snakemake 7 environment (default)
+[feature.hg3.dependencies]
+python = "3.9.*"
+pulp = "<2.8"
+
+[feature.hg3.pypi-dependencies]
+hydra-genetics = "==3.3.2"
+snakemake = ">=7.32.4, <8"
+
+# hydra-genetics 4.x / Snakemake 7 environment
+[feature.hg4.dependencies]
+python = "3.9.*"
+pulp = "<2.8"
+
+[feature.hg4.pypi-dependencies]
+hydra-genetics = "==4.0.0"
+snakemake = ">=7.32.4, <8"
+
+[environments]
+default = { features = ["hg3"], solve-group = "hg3" }
+hg4 = { features = ["hg4"], solve-group = "hg4" }
