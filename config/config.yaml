@@ -1,8 +1,8 @@
 ---
 output: "config/output_files.yaml"
 resources: "config/resources.yaml"
-samples: "config/samples_N.tsv"
-units: "config/units_N.tsv"
+samples: "config/samples.tsv"
+units: "config/units.tsv"
 
 default_container: "docker://hydragenetics/common:4.0.0"
 pipeline_version: "1.0"
