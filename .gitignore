@@ -10,6 +10,9 @@ cnvkit_pon
 .parallel/
 slurm/
 .cache/
+.claude/
+.pixi/
+.pytest_cache/
 
 .DS_Store
 ._.DS_Store
@@ -21,3 +24,5 @@ annotation/
 prealignment/
 references/
 ref_data/
+
+sync_*.sh
