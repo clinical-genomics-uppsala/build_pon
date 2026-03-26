@@ -1,8 +1,8 @@
 ---
 output: "config/output_files.yaml"
 resources: "config/resources.yaml"
-samples: "config/samples.tsv"
-units: "config/units.tsv"
+samples: "config/samples_N.tsv"
+units: "config/units_N.tsv"
 
 default_container: "docker://hydragenetics/common:3.3.0"
 pipeline_version: "1.0"
@@ -13,7 +13,6 @@ module_versions:
   cnv_sv: "develop"
   filtering: "v1.1.0"
   prealignment: "v1.4.0"
-  reports: "f5ff8bde067a4d10c81eb021c685fa75ef34d541" # last change compatible with this pipeline before v0.11.0
   references: "develop"
   snv_indels: "v2.0.0"
   qc: "v0.6.0"
@@ -25,7 +24,7 @@ reference:
   design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
   mappability: "ref_data/access-5k-mappable.hg38.bed"
 
-aligner: "vacmap"
+aligner: "pbmm2"
 haplotag_path: "snv_indels/whatshap_haplotag"
 haplotag_suffix: "haplotagged"
 
