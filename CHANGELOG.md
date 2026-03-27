@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.2.0](https://github.com/clinical-genomics-uppsala/build_pon/compare/v0.1.0...v0.2.0) (2026-03-27)
+
+
+### Features
+
+* add different aligners, pixi, sniffles2, picard and hydra-genetics v4  ([#7](https://github.com/clinical-genomics-uppsala/build_pon/issues/7)) ([7c90ea8](https://github.com/clinical-genomics-uppsala/build_pon/commit/7c90ea827042a016652ffc7a649fa25380aaff4a))
+* add QC block ([8dbc255](https://github.com/clinical-genomics-uppsala/build_pon/commit/8dbc25581c14b470ced80f945df46bcce0255b40))
+* add QC, SV and configurable aligner ([#2](https://github.com/clinical-genomics-uppsala/build_pon/issues/2)) ([18a4318](https://github.com/clinical-genomics-uppsala/build_pon/commit/18a4318c915aff5469d83c8f79e28a9df221bbbe))
+* add SV discovery with sniffles2 and pbsv and configurable aligner for different tools ([17c786c](https://github.com/clinical-genomics-uppsala/build_pon/commit/17c786c4831fb00b4e69e2a97fceb0342bd4f578))
+* bump common container version to 4.0.0 ([1be0bfe](https://github.com/clinical-genomics-uppsala/build_pon/commit/1be0bfe03bcd6bb9939bec7a1152ce30f3fbc3e4))
+* functions to create paths to bam and bai files depending on whcih aligner is configured ([2374cb9](https://github.com/clinical-genomics-uppsala/build_pon/commit/2374cb975cdf463c6d7fe879bd78e25120ad896d))
+* update config with new references and tools ([1241ebc](https://github.com/clinical-genomics-uppsala/build_pon/commit/1241ebcb66e814d9950f165df9c1699044cc0783))
+* use pbmm2 as primary aligner and vacmap as secondary (for sniffles2 only) ([#6](https://github.com/clinical-genomics-uppsala/build_pon/issues/6)) ([af4156f](https://github.com/clinical-genomics-uppsala/build_pon/commit/af4156f529f67deb16b4ce41ddf9e326bccea3c5))
+* use pbmm2 as the main aligner; vacmap as secondary ([f2d957e](https://github.com/clinical-genomics-uppsala/build_pon/commit/f2d957e45c1ae3d0106b7833f0dfcd4f1f2ab8cf))
+
+
+### Bug Fixes
+
+* add correct docker for bed_to_interval list and extra params for bcftools merge to handle one sample cases ([2edf338](https://github.com/clinical-genomics-uppsala/build_pon/commit/2edf3389029614123f10b4c1b9c48fe0ccb5a16b))
+* add required library imports ([79453f6](https://github.com/clinical-genomics-uppsala/build_pon/commit/79453f6640d435d64aa41bc136becfa9458f36c9))
+* bam from pbmm2 as deepsomatic_pon input ([#5](https://github.com/clinical-genomics-uppsala/build_pon/issues/5)) ([56ffdad](https://github.com/clinical-genomics-uppsala/build_pon/commit/56ffdada539c86d6796f893e0085309138127d8f))
+* deepsomatic_pon rule inputs ([fb9e4dc](https://github.com/clinical-genomics-uppsala/build_pon/commit/fb9e4dc9ca3f22a63a9b6bb0aca62e601c0d0e80))
+* dry run with hydra-genetics v4 ([f1208f5](https://github.com/clinical-genomics-uppsala/build_pon/commit/f1208f531c4565135aac760c2aa9d3f621447c3b))
+
+
+### Reverts
+
+* default samples/units filenames ([d546e58](https://github.com/clinical-genomics-uppsala/build_pon/commit/d546e58e28279ddb118de98c622dd3a6ef911c42))
+
+
+### Documentation
+
+* upd rulegraph ([606f966](https://github.com/clinical-genomics-uppsala/build_pon/commit/606f9669df188fa03dfde352608ff2ef9abdc112))
+* update readme ([05c7d62](https://github.com/clinical-genomics-uppsala/build_pon/commit/05c7d62419d0524cca409d665916046607fa1479))
+* update README.md ([bbac476](https://github.com/clinical-genomics-uppsala/build_pon/commit/bbac476cead1d03033274d722cd761f7a7891743))
+* update rulegraph ([e19a351](https://github.com/clinical-genomics-uppsala/build_pon/commit/e19a35119719098d44f253996dd07225f08660c8))
+* update rulegraph ([43830ac](https://github.com/clinical-genomics-uppsala/build_pon/commit/43830ac1d3b95be045d4b0cc9adf89933b8d780f))
+* update the main header in readme ([4120001](https://github.com/clinical-genomics-uppsala/build_pon/commit/41200011b66ecc3c7b60a79cf0b7257c226afab6))
+* update the main header in readme ([#4](https://github.com/clinical-genomics-uppsala/build_pon/issues/4)) ([3b2347f](https://github.com/clinical-genomics-uppsala/build_pon/commit/3b2347fb5b8ba65cd5c92d9c59406d65d4b21cd0))
+
 ## 0.1.0 (2025-05-28)
 
 
