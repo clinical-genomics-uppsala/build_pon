@@ -28,4 +28,4 @@ jobs:
       - name: snakemake dry run
         working-directory: .tests/integration
         run: |
-          pixi run snakemake -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config/config.yaml
+          pixi run -e hg4 snakemake -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config/config.yaml
