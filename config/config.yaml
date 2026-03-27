@@ -4,17 +4,85 @@ resources: "config/resources.yaml"
 samples: "config/samples.tsv"
 units: "config/units.tsv"
 
-default_container: "docker://hydragenetics/common:3.1.1.1"
+default_container: "docker://hydragenetics/common:4.0.0"
+pipeline_version: "1.0"
+
+module_versions:
+  alignment: "develop"
+  annotation: "v1.2.0"
+  cnv_sv: "develop"
+  filtering: "v1.1.0"
+  prealignment: "v1.4.0"
+  references: "develop"
+  snv_indels: "v2.0.0"
+  qc: "v0.6.0"
 
 reference:
   fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
-  design_bed: "ref_data/Myeloma_backbone_GRCh38_Chr1_17_edited.bed"
-  mappability: "ref_data/access-5k-mappable.hg19.bed"
+  trf: &trf "ref_data/human_GRCh38_no_alt_analysis_set.trf.bed"
+  design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
+  mappability: "ref_data/access-5k-mappable.hg38.bed"
+
+aligner: "pbmm2"
+haplotag_path: "snv_indels/whatshap_haplotag"
+haplotag_suffix: "haplotagged"
 
 bcftools_merge:
-  container: "docker://hydragenetics/common:3.1.1.1"
+  container: "docker://hydragenetics/common:3.3.0"
+  extra: " --force-single --force-samples"
+
+bed_to_interval_list:
+  container: "docker://hydragenetics/gatk4:4.6.2.0"
+
+cnvkit_create_targets:
+    container: "docker://hydragenetics/cnvkit:0.9.11"
+    extra: " --split "
+
+cnvkit_create_anti_targets:
+    container: "docker://hydragenetics/cnvkit:0.9.11"
+    extra: ""
+
+cnvkit_build_normal_reference:
+  container: "docker://hydragenetics/cnvkit:0.9.11"
   extra: ""
+
+pbsv_discover:
+  container: "docker://hydragenetics/pbsv:2.9.0"
+  trf: *trf
+  extra: ""
+
+pbsv_call:
+  container: "docker://hydragenetics/pbsv:2.9.0"
+  extra: ""
+
+sniffles2_call:
+  container: "docker://hydragenetics/sniffles2:2.6.1"
+  extra: "--phase"
+
+deepsomatic_pon:
+  container: "docker://google/deepsomatic:1.9.0"
+  model: "PACBIO"
+  extra: ""
+
+mosdepth:
+  container: "docker://hydragenetics/mosdepth:0.3.6"
+  by: *design_bed
+  extra: ""
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.25.1"
+  reports:
+    DNA:
+      included_unit_types: 
+        - "N"
+      qc_files:
+        - "qc/sequali/{sample}_{type}_{processing_unit}_{barcode}.json"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
 
 pbmarkdup:
   container: "docker://hydragenetics/pbmarkdup:1.1.0"
@@ -33,45 +101,26 @@ pbmm2_align:
 pbmm2_merge:
   container: "docker://hydragenetics/pbmm2:1.16"
 
-deepsomatic_pon:
-  container: "docker://google/deepsomatic:1.8.0"
-  model: "PACBIO"
+picard_collect_alignment_summary_metrics:
+  container: "docker://hydragenetics/picard:2.25.4"
   extra: ""
 
-cnvkit_create_targets:
-    container: "docker://hydragenetics/cnvkit:0.9.9"
-    extra: " --split "
-
-cnvkit_create_anti_targets:
-    container: "docker://hydragenetics/cnvkit:0.9.9"
-    extra: ""
-
-cnvkit_build_normal_reference:
-  container: "docker://hydragenetics/cnvkit:0.9.9"
+picard_collect_hs_metrics:
+  container: "docker://hydragenetics/picard:2.25.4"
   extra: ""
 
-whatshap_phase:
-    container: "docker://hydragenetics/whatshap:2.2"
-    extra: ""
+sequali:
+  container: "docker://hydragenetics/sequali:0.12.0"
+  extra: ""
 
 # required by alignment or prealignment
 trimmer_software: "None"
 
-multiqc:
-  container: "docker://hydragenetics/multiqc:1.25.1"
-  reports:
-    DNA:
-      included_unit_types: ['N', 'T']
-      qc_files:
-        - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
-        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
-        - "qc/picard_collect_duplication_metrics/{sample}_{type}.duplication_metrics.txt"
-        - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
-        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
-        - "qc/picard_collect_insert_size_metrics/{sample}_{type}.insert_size_metrics.txt"
-        - "qc/picard_collect_multiple_metrics/{sample}_{type}.{ext}"
-        - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
-        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
-        - "qc/mosdepth_bed/{sample}_{type}.per-base.bed.gz"
-        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
-        - "prealignment/fastp_pe/{sample}_{type}_{flowcell}_{lane}_{barcode}_fastp.json"
+vacmap_align:
+  mode: "L"
+  container: "docker://hydragenetics/vacmap:1.0.0"
+  extra: ""
+
+whatshap_phase:
+    container: "docker://hydragenetics/whatshap:2.2"
+    extra: " --ignore-read-groups"
