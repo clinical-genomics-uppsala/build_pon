@@ -28,7 +28,7 @@ from hydra_genetics.utils.software_versions import touch_pipeline_version_file_n
 from hydra_genetics.utils.software_versions import touch_software_version_file
 from hydra_genetics.utils.software_versions import use_container
 
-min_version("6.8.0")
+min_version("7.32.4")
 
 sys.path.insert(0, os.path.join(workflow.basedir, "scripts"))
 from utils import get_units_column, get_aligner_bam, get_aligner_bai
@@ -94,7 +94,7 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 
 ### Read and validate units file
 
-units = pandas.read_table(config["units"], dtype=str)
+units = pd.read_table(config["units"], dtype=str)
 
 if units.platform.iloc[0] in ["PACBIO", "ONT"]:
     units = units.set_index(["sample", "type", "processing_unit", "barcode"], drop=False).sort_index()
