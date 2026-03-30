@@ -24,5 +24,7 @@ annotation/
 prealignment/
 references/
 ref_data/
+config/samples_N.tsv
+config/units_N.tsv
 
 sync_*.sh
