@@ -1,7 +1,7 @@
 # GEMINI.md - build_pon Project Context
 
 ## Project Overview
-`build_pon` is a Snakemake-based bioinformatics workflow module part of the **Hydra-Genetics** ecosystem. Its primary purpose is to generate **Panel of Normals (PoN)** files for use with **CNVkit** and **DeepSomatic**, as well as multiqc report with sequencing and mapping quality metrics.
+`build_pon` is a Snakemake-based bioinformatics workflow module part of the **Hydra-Genetics** ecosystem. Its primary purpose is to generate **Panel of Normals (PoN)** files for use with **CNVkit** and **DeepSomatic**, as well as MultiQC report with sequencing and mapping quality metrics.
 
 ### Key Technologies
 - **Snakemake**: Workflow management and rule orchestration.
