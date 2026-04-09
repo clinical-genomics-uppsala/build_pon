@@ -196,6 +196,17 @@ properties:
         type: string
       extra:
         type: string
+  severus_t_only:
+    type: object
+    properties:
+      container:
+        type: string
+      vntr:
+        type: string
+      pon:
+        type: string
+      extra:
+        type: string
   sniffles2_call:
     type: object
     properties:
