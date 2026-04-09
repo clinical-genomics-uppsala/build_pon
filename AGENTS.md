@@ -55,9 +55,6 @@ pixi run snakemake -s ../../Snakefile --configfiles ../../config/config.yaml con
 
 ### Unit Tests
 Python scripts in `workflow/scripts/` are tested using `pytest`:
-```bash
-pix run tests
-```
 
 ### Linting and Formatting
 - **Snakemake**: `snakefmt` is used for consistent formatting.
