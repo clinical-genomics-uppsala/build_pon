@@ -51,6 +51,8 @@ properties:
         type: string
       mappability:
         type: string
+      severus_pon:
+        type: string
     required:
       - fasta
       - design_bed
@@ -204,6 +206,8 @@ properties:
       vntr:
         type: string
       pon:
+        type: string
+      severus_pon:
         type: string
       extra:
         type: string
