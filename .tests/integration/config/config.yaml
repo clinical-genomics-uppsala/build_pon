@@ -1,2 +1,15 @@
 ---
- output: "../../config/output_files.yaml"
+output: "../../config/output_files.yaml"
+
+# these reference files are dummies for snakemake dry-run
+reference:
+  fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
+  fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
+  trf: &trf "ref_data/human_GRCh38_no_alt_analysis_set.trf.bed"
+  severus_pon: &severus_pon "ref_data/PoN_1000G_hg38.tsv.gz"
+  design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
+  mappability: "ref_data/access-5k-mappable.hg38.bed"
+
+bcftools_merge:
+  container: "docker://hydragenetics/common:3.3.0"
+  extra: " --force-single --force-samples" # required if running on one sample
