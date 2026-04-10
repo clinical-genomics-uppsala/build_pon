@@ -62,7 +62,7 @@ sniffles2_call:
   extra: "--phase"
 
 severus_t_only:
-  container: "docker://hydragenetics/severus:1.2"
+  container: "docker://hydragenetics/severus:1.5"
   vntr: *trf
   pon: *severus_pon
   extra: ""
