@@ -10,6 +10,10 @@ reference:
   design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
   mappability: "ref_data/access-5k-mappable.hg38.bed"
 
+severus_t_only:
+  vntr: *trf
+  pon: *severus_pon
+
 bcftools_merge:
   container: "docker://hydragenetics/common:3.3.0"
   extra: " --force-single --force-samples" # required if running on one sample
