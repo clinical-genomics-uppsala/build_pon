@@ -24,6 +24,7 @@ annotation/
 prealignment/
 references/
 ref_data/
+!.tests/integration/ref_data/
 config/samples_N.tsv
 config/units_N.tsv
 
