@@ -53,7 +53,7 @@ Is not implemented yet.
 Python scripts in `workflow/scripts/` are tested using `pytest`:
 
 ```bash
-pixi run pytest
+pixi run tests
 ```
 
 ### Linting and Formatting
