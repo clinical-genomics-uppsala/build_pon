@@ -24,16 +24,16 @@ The project follows a modular architecture where it "uses" rules from external H
 ## Building and Running
 
 ### Main Workflow
-Dry-run:
+
+Dry-run on the test dataset:
 ```bash
 pixi run test-dry
 ```
-Full run:
+
+Full run on the test dataset (do not run on osx-arm64 platform):
 ```bash
 pixi run test-full
 ```
-
-Do not use full run on osx-arm64 platform (this computer). Use `pixi run test-dry` instead.
 
 ### Key Inputs
 - `config/samples.tsv`: Lists unique sample IDs.
@@ -42,27 +42,33 @@ Do not use full run on osx-arm64 platform (this computer). Use `pixi run test-dr
 
 ### Expected Outputs
 
-described by user in `config/output_files.yaml`. Normally, the expected outputs are normal SNP/Indel VCF, normal SV VCF, normal CNVkit PoN (.cnn format), and MultiQC report.
+described by user in `config/output_files.yaml`. Normally, the expected outputs are normal SNP/Indel VCF, normal SV VCF, normal CNVkit PoN (.cnn format), and a MultiQC report.
 
 ## Testing and Quality Assurance
 
 ### Integration Tests
-The project includes a small integration test dataset which is not intended for this platform (osx-arm64):
-```bash
-cd .tests/integration
-pixi run snakemake -s ../../Snakefile --configfiles ../../config/config.yaml config/config.yaml -j1 --use-singularity
-```
+Is not implemented yet.
 
 ### Unit Tests
 Python scripts in `workflow/scripts/` are tested using `pytest`:
 
+```bash
+pixi run pytest
+```
+
 ### Linting and Formatting
 - **Snakemake**: `snakefmt` is used for consistent formatting.
-- **Python**: `pycodestyle` (PEP8) is enforced.
+- **Python**: `pycodestyle` (PEP8) is enforced; `snakefmt` is used for consistent formatting.
+
+```bash
+pixi run fmt-wf
+pixi run fmt-py
+pixi run fmt-tests
+```
+
 - CI pipelines in `.github/workflows/` automate these checks on every push to `main` or `develop`.
 
 ## Development Conventions
 - **Modular Design**: Avoid defining large local rules; instead, use available [Hydra-Genetics](https://github.com/orgs/hydra-genetics/repositories) modules.
 - **Validation**: All configuration changes should be reflected in the corresponding schema files in `workflow/schemas/`.
-- **Reproducibility**: Always use `--use-singularity` to ensure software versions are locked via containers.
 - **Metadata Strictness**: `samples.tsv` and `units.tsv` must strictly follow the schema defined in `workflow/schemas/`.
