@@ -5,7 +5,7 @@ samples: "config/samples.tsv"
 units: "config/units.tsv"
 
 default_container: "docker://hydragenetics/common:4.0.0"
-pipeline_version: "1.0"
+pipeline_version: "0.2.1"
 
 module_versions:
   alignment: "develop"
@@ -18,11 +18,12 @@ module_versions:
   qc: "v0.6.0"
 
 reference:
-  fasta: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
-  fai: "ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
-  trf: &trf "ref_data/human_GRCh38_no_alt_analysis_set.trf.bed"
-  design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
-  mappability: "ref_data/access-5k-mappable.hg38.bed"
+  fasta: "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
+  fai: "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
+  trf: &trf "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/human_GRCh38_no_alt_analysis_set.trf.bed"
+  severus_pon: &severus_pon "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/PoN_1000G_hg38.tsv.gz"
+  design_bed: &design_bed "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
+  mappability: "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/access-5k-mappable.hg38.bed"
 
 aligner: "pbmm2"
 haplotag_path: "snv_indels/whatshap_haplotag"
@@ -37,7 +38,7 @@ bed_to_interval_list:
 
 cnvkit_create_targets:
     container: "docker://hydragenetics/cnvkit:0.9.11"
-    extra: " --split "
+    extra: "-a 2000"
 
 cnvkit_create_anti_targets:
     container: "docker://hydragenetics/cnvkit:0.9.11"
@@ -45,7 +46,7 @@ cnvkit_create_anti_targets:
 
 cnvkit_build_normal_reference:
   container: "docker://hydragenetics/cnvkit:0.9.11"
-  extra: ""
+  extra: "--target-avg-size 2000"
 
 pbsv_discover:
   container: "docker://hydragenetics/pbsv:2.9.0"
@@ -59,6 +60,12 @@ pbsv_call:
 sniffles2_call:
   container: "docker://hydragenetics/sniffles2:2.6.1"
   extra: "--phase"
+
+severus_t_only:
+  container: "docker://hydragenetics/severus:1.5"
+  vntr: *trf
+  pon: *severus_pon
+  extra: ""
 
 deepsomatic_pon:
   container: "docker://google/deepsomatic:1.9.0"

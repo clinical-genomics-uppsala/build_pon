@@ -18,23 +18,25 @@ Builds Panel of Normals (PoN) files from PacBio HiFi (REVIO) normal samples for 
 
 - **CNVkit** — copy number variation analysis
 - **DeepSomatic** — small variant calling
-- **PBSV** and **Sniffles2** — structural variant calling
+- **PBSV**, **Severus** and **Sniffles2** — structural variant calling
 
 Also produces a MultiQC QC report (coverage, alignment metrics, per-read QC).
 
 ## :heavy_exclamation_mark: Dependencies
 
-[![hydra-genetics](https://img.shields.io/badge/hydragenetics-v3.3.2-blue)](https://github.com/hydra-genetics/)
-[![python](https://img.shields.io/badge/python-3.9-blue)](https://www.python.org/)
-[![snakemake](https://img.shields.io/badge/snakemake->=7.32.4,<8-blue)](https://snakemake.readthedocs.io/en/stable/)
-[![singularity](https://img.shields.io/badge/singularity-3.0.0-blue)](https://sylabs.io/docs/)
-[![pixi](https://img.shields.io/badge/pixi-0.39.0-blue)](https://pixi.sh)
+All dependencies are managed by [pixi](https://pixi.sh). Install pixi, then run:
+
+```bash
+pixi install
+```
+
+This resolves and installs all required packages (Python, Snakemake, hydra-genetics, and other tools) as defined in `pixi.toml`. Container images for individual pipeline tools are pulled automatically at runtime via Singularity/Apptainer and are listed in `config/config.yaml`.
 
 ## :school_satchel: Preparations
 
 ### Sample data
 
-Input data should be added to [`config/samples.tsv`](config/samples.tsv) and [`config/units.tsv`](config/units.tsv).
+Input data should be added to [`config/samples.tsv`](config/samples.tsv) and [`config/units.tsv`](config/units.tsv). Both files can be made using `hydra-genetics create-input-files` command.
 
 | Column | File | Description |
 |--------|------|-------------|
@@ -59,6 +61,8 @@ The following reference files must be configured in `config/config.yaml` under t
 | `design_bed` | Capture design BED file |
 | `trf` | Tandem repeat file for PBSV (`.bed`) |
 | `mappability` | Mappability file for CNVkit |
+| `severus_pon` | 1000 genomes database used by Severus to filter out normal variants (`.tsv.gz`) |
+
 
 ## :white_check_mark: Testing
 
@@ -68,29 +72,30 @@ Unit tests:
 pixi run tests
 ```
 
-Integration test (requires Singularity and configured reference data):
-
-```bash
-cd .tests/integration
-snakemake -s ../../Snakefile --configfiles ../../config/config.yaml config/config.yaml -j1 --use-singularity
-```
-
-`../../config/config.yaml` is the main config; `config/config.yaml` is the test override. Values in the latter take precedence.
-
 ## :rocket: Usage
 
 Dry-run to validate the DAG:
 
 ```bash
-# using hydra-genetics v4.0.0
-pixi run -e hg4 dry
+pixi run all-dry
 ```
 
 Full run on a SLURM cluster:
 
 ```bash
-# using hydra-genetics v4.0.0
-pixi run -e hg4 full
+pixi run all-full
+```
+
+### Important configuration information
+
+Bin size for CNVkit rules can be specified under `extra` key in `config/config.yaml`, for instance:
+
+```yaml
+cnvkit_create_targets:
+    extra: "-a 2000"
+
+cnvkit_build_normal_reference:
+    extra: "--target-avg-size 2000"
 ```
 
 ### Output files
@@ -99,7 +104,7 @@ pixi run -e hg4 full
 |------|-------------|
 | `results/cnvkit_build_normal_reference/cnvkit.PoN.cnn` | PoN for CNVkit (copy number) |
 | `results/bcftools_merge/snv_normal.vcf.gz` | PoN for DeepSomatic (small variants) |
-| `results/bcftools_merge/sv_normal.vcf.gz` | Merged SV calls from PBSV + Sniffles2 (structural variants) |
+| `results/bcftools_merge/sv_normal.vcf.gz` | Merged SV calls from PBSV, Severus and Sniffles2 |
 | `results/qc/multiqc/multiqc_design2.html` | MultiQC report |
 
 ## :judge: Rule Graph

@@ -1,13 +1,17 @@
-# GEMINI.md - build_pon Project Context
+---
+name: build_pon
+description: "build_pon is a Snakemake-based bioinformatics workflow. Its primary purpose is to generate Panel of Normals (PoN) files for use with CNVkit, DeepSomatic and SVDB, as well as MultiQC report with sequencing and mapping quality metrics."
+---
 
 ## Project Overview
-`build_pon` is a Snakemake-based bioinformatics workflow module part of the **Hydra-Genetics** ecosystem. Its primary purpose is to generate **Panel of Normals (PoN)** files for use with **CNVkit** and **DeepSomatic**, as well as MultiQC report with sequencing and mapping quality metrics.
+`build_pon` is a Snakemake-based bioinformatics workflow. Its primary purpose is to generate **Panel of Normals (PoN)** files for use with **CNVkit**, **DeepSomatic** and **SVDB**, as well as MultiQC report with sequencing and mapping quality metrics.
 
 ### Key Technologies
 - **Snakemake**: Workflow management and rule orchestration.
-- **Python (3.8+)**: Core logic, data manipulation (pandas), and validation.
+- **Python (3.9+)**: Core logic, data manipulation (pandas), and validation.
 - **Singularity**: Containerized execution of bioinformatics tools.
 - **Hydra-Genetics Framework**: Utilizes modular Snakemake patterns for reusability.
+- **Pixi**: External dependency and environment management (python version, snakemake version etc.).
 
 ### Architecture
 The project follows a modular architecture where it "uses" rules from external Hydra-Genetics repositories (alignment, annotation, cnv_sv, etc.) while defining local rules for PoN-specific processing.
@@ -20,9 +24,15 @@ The project follows a modular architecture where it "uses" rules from external H
 ## Building and Running
 
 ### Main Workflow
-To run the workflow with default configurations:
+
+Dry-run on the test dataset:
 ```bash
-snakemake -s workflow/Snakefile --configfile config/config.yaml --use-singularity -j <threads>
+pixi run test-dry
+```
+
+Full run on the test dataset (do not run on osx-arm64 platform):
+```bash
+pixi run test-full
 ```
 
 ### Key Inputs
@@ -31,31 +41,34 @@ snakemake -s workflow/Snakefile --configfile config/config.yaml --use-singularit
 - `config/config.yaml`: Global settings, including reference paths and module-specific parameters.
 
 ### Expected Outputs
-- `build_pon/results/cnvkit_build_normal_reference/cnvkit.PoN.cnn`: PoN file for CNVkit.
-- `build_pon/results/bcftools_merge/normal_db.vcf.gz`: PoN file for DeepSomatic.
+
+described by user in `config/output_files.yaml`. Normally, the expected outputs are normal SNP/Indel VCF, normal SV VCF, normal CNVkit PoN (.cnn format), and a MultiQC report.
 
 ## Testing and Quality Assurance
 
 ### Integration Tests
-The project includes a small integration test dataset:
-```bash
-cd .tests/integration
-snakemake -s ../../Snakefile --configfiles ../../config/config.yaml config/config.yaml -j1 --use-singularity
-```
+Is not implemented yet.
 
 ### Unit Tests
 Python scripts in `workflow/scripts/` are tested using `pytest`:
+
 ```bash
-pytest workflow/scripts
+pixi run tests
 ```
 
 ### Linting and Formatting
 - **Snakemake**: `snakefmt` is used for consistent formatting.
-- **Python**: `pycodestyle` (PEP8) is enforced.
+- **Python**: `pycodestyle` (PEP8) is enforced; `snakefmt` is used for consistent formatting.
+
+```bash
+pixi run fmt-wf
+pixi run fmt-py
+pixi run fmt-tests
+```
+
 - CI pipelines in `.github/workflows/` automate these checks on every push to `main` or `develop`.
 
 ## Development Conventions
-- **Modular Design**: Avoid defining large local rules; instead, wrap reusable logic into Hydra-Genetics modules or separate rules files.
+- **Modular Design**: Avoid defining large local rules; instead, use available [Hydra-Genetics](https://github.com/orgs/hydra-genetics/repositories) modules.
 - **Validation**: All configuration changes should be reflected in the corresponding schema files in `workflow/schemas/`.
-- **Reproducibility**: Always use `--use-singularity` to ensure software versions are locked via containers.
 - **Metadata Strictness**: `samples.tsv` and `units.tsv` must strictly follow the schema defined in `workflow/schemas/`.

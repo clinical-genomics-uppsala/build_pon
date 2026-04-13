@@ -12,10 +12,12 @@ precom-fmt = "pre-commit run snakefmt"
 fmt-wf = "snakefmt -l 130 workflow/"
 fmt-py="snakefmt -l 130 workflow/scripts/"
 fmt-tests="snakefmt -l 130 .tests/unit/"
-dry = "snakemake --configfile config/config.yaml -n --cores 1"
-full = "snakemake --configfile config/config.yaml --profile profiles/marvin_cpu"
-rulegraph = "snakemake --configfile config/config.yaml --rulegraph | dot -Tsvg > images/rulegraph.svg"
-dotfile = "snakemake --configfile config/config.yaml --rulegraph > images/rulegraph.dot"
+all-dry = "snakemake --configfile config/config.yaml -n --cores 1"
+all-full = "snakemake --configfile config/config.yaml --profile profiles/marvin_cpu"
+test-dry = "snakemake -n --configfile config/config.yaml --config samples=config/samples.tsv units=config/units.tsv --cores 1"
+test-full = "snakemake --configfile config/config.yaml --config samples=config/samples.tsv units=config/units.tsv --profile profiles/marvin_cpu"
+rulegraph = "snakemake --configfile config/config.yaml --config samples=config/samples.tsv units=config/units.tsv --rulegraph | dot -Tsvg > images/rulegraph.svg"
+dotfile = "snakemake --configfile config/config.yaml --config samples=config/samples.tsv units=config/units.tsv --rulegraph > images/rulegraph.dot"
 
 
 # Shared conda dependencies (available in all environments)

@@ -274,14 +274,14 @@ use rule tabix from cnv_sv as cnv_sv_tabix with:
 # SV discovery
 rule bgzip_sv_vcf:
     input:
-        "cnv_sv/{caller}/{sample}_{type}.vcf",
+        "cnv_sv/{vcf_path}.vcf",
     output:
-        temp("cnv_sv/{caller}/{sample}_{type}.vcf.gz"),
+        temp("cnv_sv/{vcf_path}.vcf.gz"),
     log:
-        "cnv_sv/{caller}/{sample}_{type}.vcf.gz.log",
+        "cnv_sv/{vcf_path}.vcf.gz.log",
     benchmark:
         repeat(
-            "cnv_sv/{caller}/{sample}_{type}.vcf.gz.benchmark.tsv",
+            "cnv_sv/{vcf_path}.vcf.gz.benchmark.tsv",
             config.get("bgzip_sv_vcf", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("bgzip_sv_vcf", {}).get("threads", config["default_resources"]["threads"])
@@ -299,7 +299,7 @@ rule bgzip_sv_vcf:
 
 use rule tabix from cnv_sv as cnv_sv_tabix_sv with:
     wildcard_constraints:
-        file="^cnv_sv/(pbsv_call|sniffles2_call)/.+",
+        file="^cnv_sv/(pbsv_call|sniffles2_call|severus_t_only)/.+",
 
 
 # pbsv requires pbmm2 aligner
@@ -316,18 +316,22 @@ use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call with:
         ref=config.get("reference", {}).get("fasta", ""),
 
 
+use rule severus_t_only from cnv_sv as cnv_sv_severus_t_only with:
+    input:
+        bam=lambda wildcards: get_aligner_bam(wildcards, config, type_override="N"),
+        bai=lambda wildcards: get_aligner_bai(wildcards, config, type_override="N"),
+        vntr=config.get("severus_t_only", {}).get("vntr", ""),
+        pon=config.get("severus_t_only", {}).get("pon", ""),
+
+
 use rule bcftools_merge from references as references_sv_bcftools_merge with:
     input:
-        vcfs=expand(
-            "cnv_sv/{caller}/{sample}_N.vcf.gz",
-            caller=["pbsv_call", "sniffles2_call"],
-            sample=sample_names,
-        ),
-        vcfs_tabix=expand(
-            "cnv_sv/{caller}/{sample}_N.vcf.gz.tbi",
-            caller=["pbsv_call", "sniffles2_call"],
-            sample=sample_names,
-        ),
+        vcfs=expand("cnv_sv/pbsv_call/{sample}_N.vcf.gz", sample=sample_names)
+        + expand("cnv_sv/sniffles2_call/{sample}_N.vcf.gz", sample=sample_names)
+        + expand("cnv_sv/severus_t_only/{sample}_N_somatic_sv.vcf.gz", sample=sample_names),
+        vcfs_tabix=expand("cnv_sv/pbsv_call/{sample}_N.vcf.gz.tbi", sample=sample_names)
+        + expand("cnv_sv/sniffles2_call/{sample}_N.vcf.gz.tbi", sample=sample_names)
+        + expand("cnv_sv/severus_t_only/{sample}_N_somatic_sv.vcf.gz.tbi", sample=sample_names),
     output:
         normal_vcf=temp("references/bcftools_merge/sv_normal.vcf.gz"),
 
