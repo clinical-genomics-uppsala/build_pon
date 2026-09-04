@@ -215,6 +215,33 @@ use rule cnvkit_build_normal_reference from references as references_cnvkit_buil
         mappability=config.get("reference", {}).get("mappability", ""),
 
 
+# JUMBLE PON
+# jumble_count natively resolves its BAM with get_units(units, wildcards)[0].bam,
+# i.e. the unmapped BAM listed in units.tsv. Point it at the merged pbmm2 BAM
+# instead - the same source CNVkit uses. VACmap output is not usable here.
+use rule jumble_count from references as references_jumble_count with:
+    input:
+        bam="alignment/pbmm2_align/{sample}_{type}.bam",
+        bai="alignment/pbmm2_align/{sample}_{type}.bam.bai",
+
+
+# jumble-reference.R globs *.counts.RDS from the directory of its first input
+# (references/jumble_count/), so stale count files from an earlier run with a
+# different sample set would silently be folded into the PoN.
+# The native output name is derived from the design BED basename; it is overridden
+# here to a stable path that downstream pipelines can point jumble_run at.
+use rule jumble_reference from references as references_jumble_reference with:
+    output:
+        PoN="references/jumble_reference/jumble.PoN.RDS",
+    log:
+        "references/jumble_reference/jumble.PoN.RDS.output.log",
+    benchmark:
+        repeat(
+            "references/jumble_reference/jumble.PoN.RDS.output.benchmark.tsv",
+            config.get("jumble_reference", {}).get("benchmark_repeats", 1),
+        )
+
+
 # SNV PON
 # majority of bam files will be unmapped
 # so, map them

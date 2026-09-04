@@ -9,10 +9,18 @@ reference:
   severus_pon: &severus_pon "ref_data/PoN_1000G_hg38.tsv.gz"
   design_bed: &design_bed "ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
   mappability: "ref_data/access-5k-mappable.hg38.bed"
+  jumble_annotation: &jumble_annotation "ref_data/jumble_dummy_annotation.RDS"
 
 severus_t_only:
   vntr: *trf
   pon: *severus_pon
+
+jumble_count:
+  container: "docker://hydragenetics/jumble:0.5.0"
+
+jumble_reference:
+  container: "docker://hydragenetics/jumble:0.5.0"
+  annotation: *jumble_annotation
 
 bcftools_merge:
   container: "docker://hydragenetics/common:3.3.0"

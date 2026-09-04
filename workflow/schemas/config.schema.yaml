@@ -53,6 +53,9 @@ properties:
         type: string
       severus_pon:
         type: string
+      jumble_annotation:
+        type: string
+        description: path to a Jumble gene-annotation .RDS file, see jumble_reference.annotation
     required:
       - fasta
       - design_bed
@@ -101,6 +104,29 @@ properties:
         type: string
       extra:
         type: string
+  jumble_count:
+    type: object
+    description: per-sample read counts over the design bed, input for jumble_reference
+    properties:
+      container:
+        type: string
+      benchmark_repeats:
+        type: integer
+  jumble_reference:
+    type: object
+    description: builds the Jumble panel of normals (.RDS) from all jumble_count outputs
+    properties:
+      container:
+        type: string
+      annotation:
+        type: string
+        description: >-
+          gene annotation source passed to jumble-reference.R -a. Either the literal
+          string "biomart" (fetches from Ensembl, needs network access on the compute
+          node) or an absolute path to a pre-built annotation .RDS file. A path that is
+          neither is rejected by Jumble with "Invalid annotation source."
+      benchmark_repeats:
+        type: integer
   mosdepth:
     type: object
     properties:
