@@ -110,9 +110,8 @@ lives in `cnvkit_create_targets.extra` / `cnvkit_build_normal_reference.extra`.
   `.tests/integration/ref_data/`.
 - `sync_to_marvin.sh` rsyncs the repo to the cluster, excluding data, refs, results, and docs.
 - Stale bits to be aware of: `pixi.toml` still defines `precom` / `precom-fmt` tasks although no
-  `.pre-commit-config.yaml` exists; `AGENTS.md` claims integration tests are not implemented, but
-  `.tests/integration/` and `.github/workflows/integration.yaml` exist; the README output table
-  names `multiqc_design2.html` while `config/output_files.yaml` produces `multiqc_normals.html`.
+  `.pre-commit-config.yaml` exists; the README output table names `multiqc_design2.html` while
+  `config/output_files.yaml` produces `multiqc_normals.html`.
 
 ## Open issue: Jumble dummy annotation in the integration test
 
