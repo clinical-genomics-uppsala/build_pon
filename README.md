@@ -69,7 +69,8 @@ The following reference files must be configured in `config/config.yaml` under t
 
 `jumble_reference.annotation` is passed to `jumble-reference.R -a` and must be either the literal
 string `"biomart"` (Jumble then fetches gene and exon coordinates from Ensembl, so the compute node
-needs outbound network access) or an absolute path to a pre-built annotation `.RDS` file. Anything
+needs outbound network access) or a path to a pre-built annotation `.RDS` file — absolute, or
+relative to the working directory as with every other reference path. Anything
 else is rejected by Jumble with `Invalid annotation source.`. The default config points it at
 `reference.jumble_annotation`.
 
