@@ -225,12 +225,48 @@ use rule jumble_count from references as references_jumble_count with:
         bai="alignment/pbmm2_align/{sample}_{type}.bam.bai",
 
 
-# jumble-reference.R globs *.counts.RDS from the directory of its first input
-# (references/jumble_count/), so stale count files from an earlier run with a
-# different sample set would silently be folded into the PoN.
+# jumble-reference.R is handed a directory (-i) and globs every *.counts.RDS inside it,
+# rather than reading the files snakemake declared. Counts left in references/jumble_count/
+# by an interrupted earlier run with a different sample set would therefore be folded into
+# the PoN silently. Stage exactly this run's counts into a directory that is wiped first,
+# and point jumble_reference at those instead.
+# Only the counts/ subdirectory is wiped: the log sits one level up, because the shell opens
+# its redirection before rm -rf runs and would otherwise write to an unlinked file.
+rule jumble_stage_counts:
+    input:
+        counts=expand("references/jumble_count/{sample}_N.bam.counts.RDS", sample=sample_names),
+    output:
+        counts=temp(expand("references/jumble_stage_counts/counts/{sample}_N.bam.counts.RDS", sample=sample_names)),
+    params:
+        outdir=lambda wildcards, output: os.path.dirname(output[0]),
+    log:
+        "references/jumble_stage_counts/jumble_stage_counts.log",
+    benchmark:
+        repeat(
+            "references/jumble_stage_counts/jumble_stage_counts.benchmark.tsv",
+            config.get("jumble_stage_counts", {}).get("benchmark_repeats", 1),
+        )
+    threads: config.get("jumble_stage_counts", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("jumble_stage_counts", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("jumble_stage_counts", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("jumble_stage_counts", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("jumble_stage_counts", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("jumble_stage_counts", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("jumble_stage_counts", {}).get("container", config.get("default_container", ""))
+    shell:
+        "(rm -rf {params.outdir} && mkdir -p {params.outdir} && cp -p {input.counts} {params.outdir}/) "
+        "> {log} 2>&1"
+
+
+# input is overridden so that params.input_dir, which the module derives with
+# os.path.dirname(input[0]), resolves to the staged directory above.
 # The native output name is derived from the design BED basename; it is overridden
 # here to a stable path that downstream pipelines can point jumble_run at.
 use rule jumble_reference from references as references_jumble_reference with:
+    input:
+        count_files=expand("references/jumble_stage_counts/counts/{sample}_N.bam.counts.RDS", sample=sample_names),
     output:
         PoN="references/jumble_reference/jumble.PoN.RDS",
     log:
