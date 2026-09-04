@@ -113,6 +113,27 @@ with open(config["output"]) as output:
 validate(output_spec, schema="../schemas/output_files.schema.yaml")
 
 
+### Validate the Jumble annotation source
+
+# jumble_reference receives this as a *params*, not an input, so snakemake never checks it and a
+# missing or misnamed file only surfaces once the job runs - after alignment and jumble_count have
+# already completed. Jumble accepts the literal "biomart" or a path matching \.RDS$, which it then
+# readRDS()es immediately; anything else stops with "Invalid annotation source.".
+if "jumble_reference" in config:
+    _jumble_annotation = config.get("jumble_reference", {}).get("annotation", "")
+    _jumble_hint = 'Set it to "biomart" or to a Jumble annotation .RDS file (build one with scripts/build_jumble_annotation.R).'
+    if not _jumble_annotation:
+        sys.exit(f"jumble_reference.annotation is not set. {_jumble_hint}")
+    elif _jumble_annotation != "biomart":
+        if not _jumble_annotation.lower().endswith(".rds"):
+            sys.exit(f"jumble_reference.annotation must end in .RDS, got '{_jumble_annotation}'. {_jumble_hint}")
+        if not os.path.exists(_jumble_annotation):
+            sys.exit(
+                f"jumble_reference.annotation points at a file that does not exist: "
+                f"'{_jumble_annotation}' (resolved from {os.getcwd()}). {_jumble_hint}"
+            )
+
+
 ### Set wildcard constraints
 wildcard_constraints:
     sample="|".join(samples.index),

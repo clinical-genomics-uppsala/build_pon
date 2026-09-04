@@ -24,6 +24,10 @@ reference:
   severus_pon: &severus_pon "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/PoN_1000G_hg38.tsv.gz"
   design_bed: &design_bed "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/Myelom_expected_capture_targets_annotated_v2.bed"
   mappability: "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/access-5k-mappable.hg38.bed"
+  # Gene annotation for jumble-reference.R. Must be an .RDS file (the saved output of
+  # Jumble::generate_gene_annotation()); set jumble_reference.annotation to "biomart"
+  # instead if the compute node is allowed to reach Ensembl.
+  jumble_annotation: &jumble_annotation "/beegfs-storage/projects/wp2/nobackup/Twist_Myelom/ref_data/jumble_gene_annotation_hg38.RDS"
 
 aligner: "pbmm2"
 haplotag_path: "snv_indels/whatshap_haplotag"
@@ -71,6 +75,13 @@ deepsomatic_pon:
   container: "docker://google/deepsomatic:1.9.0"
   model: "PACBIO"
   extra: ""
+
+jumble_count:
+  container: "docker://hydragenetics/jumble:0.5.0"
+
+jumble_reference:
+  container: "docker://hydragenetics/jumble:0.5.0"
+  annotation: *jumble_annotation
 
 mosdepth:
   container: "docker://hydragenetics/mosdepth:0.3.6"
